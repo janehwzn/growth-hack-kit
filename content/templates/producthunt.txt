@@ -1,0 +1,18 @@
+# Product Hunt — tagline <=60 chars; description = problem -> solution ->
+# differentiator; maker's first comment = personal story + one question.
+TAGLINE: {title} — {slogan}
+
+DESCRIPTION:
+{detail}
+
+{product} combines bazi (with true solar time correction), western astrology,
+MBTI, tarot and palmistry in one beautiful reading — built for love and
+relationships. The calculation engine is fully deterministic (zero tokens);
+AI only writes the interpretations.
+
+MAKER'S FIRST COMMENT:
+Hi hunters! I built {product} because {detail} I'm the maker — ask me
+anything about the deterministic astrology engine, or roast my synastry
+logic. What's the one feature every astrology app gets wrong?
+
+{cta}
