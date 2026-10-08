@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astraea — The star-maiden reads your fate | Join the waitlist</title>
+<style>
+  :root { --night:#0d1030; --night2:#161a45; --gold:#d4af37; --pink:#d8a7b1; --ink:#f4efe6; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:Georgia,'Times New Roman',serif; background:radial-gradient(1200px 800px at 50% -10%,var(--night2),var(--night)); color:var(--ink); min-height:100vh; }
+  .wrap { max-width:640px; margin:0 auto; padding:48px 24px 64px; text-align:center; }
+  .stars { font-size:28px; letter-spacing:12px; color:var(--gold); }
+  h1 { font-size:44px; font-weight:400; margin:16px 0 8px; letter-spacing:2px; }
+  h1 .gold { color:var(--gold); font-style:italic; }
+  .slogan { color:var(--pink); font-style:italic; font-size:18px; margin-bottom:12px; }
+  .sub { opacity:.85; line-height:1.7; margin-bottom:28px; }
+  .card { background:rgba(255,255,255,.05); border:1px solid rgba(212,175,55,.35); border-radius:16px; padding:28px 24px; margin:20px 0; }
+  .card h2 { font-weight:400; font-size:22px; margin-bottom:14px; color:var(--gold); }
+  input[type=email], input[type=text] { width:100%; padding:13px 16px; border-radius:10px; border:1px solid rgba(212,175,55,.4); background:rgba(0,0,0,.3); color:var(--ink); font-size:16px; font-family:inherit; }
+  button { background:linear-gradient(135deg,var(--gold),#b8942a); color:#1a1405; border:none; border-radius:10px; padding:13px 28px; font-size:16px; font-family:inherit; cursor:pointer; margin-top:12px; width:100%; }
+  button:hover { filter:brightness(1.1); }
+  .note { font-size:13px; opacity:.65; margin-top:10px; }
+  #reflink { word-break:break-all; background:rgba(0,0,0,.35); border:1px dashed var(--gold); border-radius:10px; padding:12px; margin-top:12px; font-size:14px; display:none; }
+  table { width:100%; border-collapse:collapse; margin-top:8px; font-size:15px; }
+  th, td { padding:10px 6px; border-bottom:1px solid rgba(212,175,55,.2); }
+  th { color:var(--gold); font-weight:400; text-align:left; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .you { color:var(--pink); font-style:italic; }
+  .foot { margin-top:36px; font-size:13px; opacity:.55; }
+  .ok { color:#9fe6a0; margin-top:10px; display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stars">✦ ✧ ✦</div>
+  <h1>Astra<span class="gold">e</span>a <span class="gold">星缘</span></h1>
+  <p class="slogan">The star-maiden reads your fate.</p>
+  <p class="sub">Bazi · MBTI · Tarot · Palmistry · Western astrology — one beautiful reading, built for love and relationships. Join the waitlist and get early access.</p>
+
+  <div class="card">
+    <h2>Join the waitlist</h2>
+    <input type="email" id="email" placeholder="you@example.com" aria-label="Email">
+    <button onclick="join()">✦ Reserve my spot</button>
+    <p class="ok" id="joinOk">You're on the list — check your email soon. ✦</p>
+    <p class="note">We store your email locally in this demo. For production, wire this form to your email provider (see README).</p>
+  </div>
+
+  <div class="card">
+    <h2>Invite friends, climb the stars</h2>
+    <p class="sub" style="margin-bottom:14px">Share your personal link — every friend who joins moves you up. Top referrers get lifetime Pro.</p>
+    <input type="text" id="code" placeholder="Pick a referral code, e.g. luna88" aria-label="Referral code">
+    <button onclick="makeLink()">Generate my referral link</button>
+    <div id="reflink"></div>
+  </div>
+
+  <div class="card">
+    <h2>✦ Leaderboard ✦</h2>
+    <table>
+      <thead><tr><th>#</th><th>Star-seeker</th><th class="num" style="text-align:right">Invites</th></tr></thead>
+      <tbody id="board"></tbody>
+    </table>
+    <p class="note">Demo board lives in your browser's localStorage. Production: swap for a tiny backend (see README).</p>
+  </div>
+
+  <p class="foot">Astraea · 星缘 — for entertainment. Made with the <a href="https://github.com/janehwzn/growth-hack-kit" style="color:var(--gold)">growth-hack-kit</a> referral template.</p>
+</div>
+
+<script>
+// ---- tiny local "backend" (localStorage). Swap for a real API in production. ----
+const DB = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+const params = new URLSearchParams(location.search);
+const incomingRef = (params.get('ref') || '').trim().toLowerCase();
+
+// Seed demo board on first visit so it never looks empty (all local).
+if (!DB.get('ghk_seeded', false)) {
+  DB.set('ghk_board', { venus_rising: 34, moonchild: 21, stardust_lee: 12, astro_mia: 7 });
+  DB.set('ghk_seeded', true);
+}
+
+// Attribute this visit to the referrer (?ref=CODE)
+if (incomingRef) {
+  const board = DB.get('ghk_board', {});
+  board[incomingRef] = (board[incomingRef] || 0) + 1;
+  DB.set('ghk_board', board);
+  DB.set('ghk_referred_by', incomingRef);
+}
+
+function join() {
+  const email = document.getElementById('email').value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert('Please enter a valid email.'); return; }
+  const list = DB.get('ghk_waitlist', []);
+  if (!list.includes(email)) list.push(email);
+  DB.set('ghk_waitlist', list);
+  document.getElementById('joinOk').style.display = 'block';
+  // Real signup delivery: replace with your provider, or mailto fallback:
+  // location.href = 'mailto:hello@example.com?subject=Waitlist&body=' + encodeURIComponent(email);
+}
+
+function makeLink() {
+  let code = document.getElementById('code').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+  if (!code) { alert('Pick a referral code first.'); return; }
+  const board = DB.get('ghk_board', {});
+  if (!(code in board)) board[code] = 0;      // claim the code
+  DB.set('ghk_board', board);
+  DB.set('ghk_mycode', code);
+  const url = location.origin + location.pathname + '?ref=' + encodeURIComponent(code);
+  const box = document.getElementById('reflink');
+  box.style.display = 'block';
+  box.innerHTML = 'Your link:<br><b>' + url + '</b><br><button style="width:auto;margin-top:10px;padding:8px 18px" onclick="navigator.clipboard.writeText(\'' + url + '\')">Copy</button>';
+  renderBoard();
+}
+
+function renderBoard() {
+  const board = DB.get('ghk_board', {});
+  const my = DB.get('ghk_mycode', '');
+  const rows = Object.entries(board).sort((a, b) => b[1] - a[1]);
+  document.getElementById('board').innerHTML = rows.map(([code, n], i) =>
+    '<tr><td>' + (i + 1) + '</td><td class="' + (code === my ? 'you' : '') + '">' +
+    code + (code === my ? ' (you)' : '') + '</td><td class="num">' + n + '</td></tr>'
+  ).join('');
+}
+renderBoard();
+</script>
+</body>
+</html>
