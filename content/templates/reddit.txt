@@ -1,0 +1,17 @@
+# Reddit — ask, don't pitch. Title = genuine question. Body = context + the
+# technical/interesting detail. Link ONLY if asked, in comments. Read the
+# sub's rules before posting (see playbooks/reddit.md).
+TITLE: {title} — but I want astrologers to roast the logic behind it
+
+BODY:
+Hi r/astrology — long-time lurker. I've been building {product}, and for this
+update ({title}) I had to make a real call:
+
+{detail}
+
+My question: where does this break down astrologically? I'm especially unsure
+about [edit this to your actual open question — e.g. how I weight moon vs.
+Venus in the compatibility score].
+
+Full disclosure: I built this. Happy to share the method, not here to sell —
+genuinely want the roast.
