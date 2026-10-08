@@ -1,0 +1,9 @@
+# X/Twitter — keep the whole post under 280 characters. One idea, line breaks,
+# 1-2 hashtags max. Put the link in a reply, not the post body.
+{title} 🔮
+
+{detail}
+
+{slogan}
+
+{cta}
