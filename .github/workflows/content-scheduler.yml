@@ -1,0 +1,55 @@
+name: content-scheduler
+
+# Weekly: generate fresh content drafts from content/updates.yaml and commit
+# them to the `drafts` branch for human review. Nothing is auto-published —
+# drafts are the input to the playbooks, not the output.
+on:
+  schedule:
+    # Every Monday 14:00 UTC = 07:00 PT / 22:00 Beijing
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+    inputs:
+      product:
+        description: "Product to generate drafts for"
+        required: false
+        default: "astraea"
+
+permissions:
+  contents: write
+
+jobs:
+  drafts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pyyaml
+        run: pip install pyyaml
+
+      - name: Generate drafts
+        run: |
+          python3 content/pipeline.py --product "${{ inputs.product || 'astraea' }}"
+          ls content/drafts/$(date +%F)/
+
+      - name: Commit to drafts branch
+        run: |
+          git config user.name "growth-hack-kit bot"
+          git config user.email "bot@growth-hack-kit.local"
+          git checkout -B drafts
+          git add content/drafts/
+          if git diff --cached --quiet; then
+            echo "No new drafts."
+          else
+            git commit -m "drafts: $(date +%F) [skip ci]"
+            git push origin drafts --force-with-lease
+          fi
+
+      - name: Upload drafts artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: drafts-$(date +%F)
+          path: content/drafts/
