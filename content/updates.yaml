@@ -1,0 +1,23 @@
+# Product updates feed the content pipeline.
+# Each entry renders one draft per platform template.
+# Optional per-update overrides: cta, link.
+
+- product: astraea
+  title: "Couple compatibility share cards launched"
+  detail: "Enter two birth dates and get a gorgeous, shareable compatibility card — bazi five-element match plus sun/moon synastry in one image."
+
+- product: astraea
+  title: "Love tarot spread is live"
+  detail: "A 3-card love spread (you / them / the connection) with interpretations written for real situationships, not generic horoscope filler."
+
+- product: astraea
+  title: "True solar time correction for bazi readings"
+  detail: "Most apps use clock time. Astraea corrects for your exact birth longitude, so your day master — and your whole chart — is actually right."
+
+- product: astraea
+  title: "16-type MBTI love profiles added"
+  detail: "Full deterministic MBTI profiles focused on romance: how each type loves, fights, and apologizes. No tokens burned, pure rules engine."
+
+- product: astraea
+  title: "Zero-token astrology engine"
+  detail: "Every calculation — bazi, transits, compatibility scores — runs on a deterministic rules engine. The AI only writes the words, never the math."
